@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright (c) 2019, 2021 Oracle and/or its affiliates. All rights reserved.
+
+    This program and the accompanying materials are made available under the
+    terms of the Eclipse Public License v. 2.0 which is available at
+    http://www.eclipse.org/legal/epl-2.0,
+    or the Eclipse Distribution License v. 1.0 which is available at
+    http://www.eclipse.org/org/documents/edl-v10.php.
+
+    SPDX-License-Identifier: EPL-2.0 OR BSD-3-Clause
+
+-->
+
+<assembly xmlns="http://maven.apache.org/ASSEMBLY/2.0.0"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/ASSEMBLY/2.0.0 http://maven.apache.org/xsd/assembly-2.0.0.xsd">
+    <id>eclipselink.zip</id>
+    <formats>
+        <format>zip</format>
+    </formats>
+    <includeBaseDirectory>false</includeBaseDirectory>
+    <dependencySets>
+        <!--License files-->
+        <dependencySet>
+            <useProjectArtifact>false</useProjectArtifact>
+            <scope>provided</scope>
+            <outputDirectory>eclipselink/</outputDirectory>
+            <includes>
+                <include>${project.groupId}:org.eclipse.persistence.parent:zip:common-license</include>
+            </includes>
+            <unpack>true</unpack>
+            <unpackOptions>
+                <includes>
+                    <include>*.html</include>
+                </includes>
+            </unpackOptions>
+        </dependencySet>
+        <dependencySet>
+            <useProjectAttachments>true</useProjectAttachments>
+            <outputDirectory>eclipselink/jlib/</outputDirectory>
+            <outputFileNameMapping>${artifact.artifactId}${dashClassifier?}.${artifact.extension}</outputFileNameMapping>
+            <includes>
+                <include>${project.groupId}:eclipselink</include>
+            </includes>
+        </dependencySet>
+        <dependencySet>
+            <useProjectArtifact>false</useProjectArtifact>
+            <scope>provided</scope>
+            <outputDirectory>eclipselink/jlib/extension/</outputDirectory>
+            <outputFileNameMapping>${artifact.artifactId}${dashClassifier?}.${artifact.extension}</outputFileNameMapping>
+            <includes>
+                <include>${project.groupId}:org.eclipse.persistence.extension</include>
+                <include>${project.groupId}:org.eclipse.persistence.nosql</include>
+                <include>${project.groupId}:org.eclipse.persistence.oracle.nosql</include>
+            </includes>
+        </dependencySet>
+        <dependencySet>
+            <useProjectArtifact>false</useProjectArtifact>
+            <outputDirectory>eclipselink/jlib/jpa/</outputDirectory>
+            <outputFileNameMapping>${artifact.artifactId}${dashClassifier?}.${artifact.extension}</outputFileNameMapping>
+            <includes>
+                <include>jakarta.persistence:jakarta.persistence-api</include>
+                <include>jakarta.annotation:jakarta.annotation-api</include>
+            </includes>
+        </dependencySet>
+        <dependencySet>
+            <useProjectArtifact>false</useProjectArtifact>
+            <scope>provided</scope>
+            <outputDirectory>eclipselink/jlib/jpa/</outputDirectory>
+            <outputFileNameMapping>${artifact.artifactId}${dashClassifier?}.${artifact.extension}</outputFileNameMapping>
+            <includes>
+                <include>${project.groupId}:org.eclipse.persistence.jpa.modelgen.processor</include>
+                <include>${project.groupId}:org.eclipse.persistence.jpars</include>
+            </includes>
+        </dependencySet>
+        <dependencySet>
+            <useProjectArtifact>false</useProjectArtifact>
+            <outputDirectory>eclipselink/jlib/moxy/</outputDirectory>
+            <outputFileNameMapping>${artifact.artifactId}.${artifact.extension}</outputFileNameMapping>
+            <includes>
+                <include>jakarta.xml.bind:jakarta.xml.bind-api</include>
+                <include>jakarta.validation:jakarta.validation-api</include>
+                <include>jakarta.json:jakarta.json-api</include>
+                <include>jakarta.activation:jakarta.activation-api</include>
+                <include>org.eclipse.angus:angus-activation</include>
+                <include>jakarta.mail:jakarta.mail-api</include>
+                <include>org.eclipse.angus:angus-mail</include>
+                <include>com.sun.xml.bind:jaxb-core</include>
+                <include>com.sun.xml.bind:jaxb-xjc</include>
+                <include>org.eclipse.parsson:parsson</include>
+            </includes>
+        </dependencySet>
+        <dependencySet>
+            <useProjectArtifact>false</useProjectArtifact>
+            <scope>provided</scope>
+            <outputDirectory>eclipselink/jlib/sdo/</outputDirectory>
+            <includes>
+                <include>${project.groupId}:commonj.sdo</include>
+            </includes>
+        </dependencySet>
+        <dependencySet>
+            <useProjectArtifact>false</useProjectArtifact>
+            <outputDirectory>eclipselink/utils/dbws/</outputDirectory>
+            <outputFileNameMapping>${artifact.artifactId}${dashClassifier?}.${artifact.extension}</outputFileNameMapping>
+            <includes>
+                <include>jakarta.servlet:jakarta.servlet-api</include>
+            </includes>
+        </dependencySet>
+        <dependencySet>
+            <useProjectArtifact>false</useProjectArtifact>
+            <scope>provided</scope>
+            <outputDirectory>eclipselink/utils/dbws/</outputDirectory>
+            <outputFileNameMapping>${artifact.artifactId}${dashClassifier?}.${artifact.extension}</outputFileNameMapping>
+            <includes>
+                <include>wsdl4j:wsdl4j</include>
+                <include>${project.groupId}:org.eclipse.persistence.oracleddlparser</include>
+                <include>${project.groupId}:org.eclipse.persistence.dbws.builder</include>
+            </includes>
+        </dependencySet>
+        <dependencySet>
+            <useProjectArtifact>false</useProjectArtifact>
+            <scope>provided</scope>
+            <outputDirectory>eclipselink/utils/rename/</outputDirectory>
+            <outputFileNameMapping>package-rename.${artifact.extension}</outputFileNameMapping>
+            <includes>
+                <include>${project.groupId}:org.eclipse.persistence.utils.rename</include>
+            </includes>
+        </dependencySet>
+    </dependencySets>
+    <fileSets>
+        <!--Scripts to bin directory-->
+        <fileSet>
+            <directory>${project.build.scriptSourceDirectory}</directory>
+            <outputDirectory>eclipselink/</outputDirectory>
+            <fileMode>755</fileMode>
+            <includes>
+                <include>**/*.sh</include>
+            </includes>
+        </fileSet>
+        <fileSet>
+            <directory>${project.build.scriptSourceDirectory}</directory>
+            <outputDirectory>eclipselink/</outputDirectory>
+            <excludes>
+                <exclude>**/*.sh</exclude>
+            </excludes>
+        </fileSet>
+        <!--package-rename.properties to utils/rename directory-->
+        <!--XML Schemas-->
+        <fileSet>
+            <directory>${gen.zip.dir}</directory>
+            <outputDirectory>eclipselink</outputDirectory>
+        </fileSet>
+    </fileSets>
+</assembly>

@@ -1,0 +1,172 @@
+import org.apache.tools.ant.filters.ReplaceTokens
+
+/*
+ * Hibernate, Relational Persistence for Idiomatic Java
+ *
+ * License: GNU Lesser General Public License (LGPL), version 2.1 or later.
+ * See the lgpl.txt file in the root directory or <http://www.gnu.org/licenses/lgpl-2.1.html>.
+ */
+
+plugins {
+	id 'java-gradle-plugin'
+	id 'com.gradle.plugin-publish' version '0.20.0'
+
+	id 'checkstyle'
+
+	// for local publishing
+	id 'maven-publish'
+}
+
+apply from: rootProject.file( 'gradle/module.gradle' )
+apply from: rootProject.file( 'gradle/javadoc.gradle' )
+apply from: rootProject.file( 'gradle/releasable.gradle' )
+
+description = "Gradle plugin for integrating Hibernate aspects into your build"
+
+ext {
+	pluginId = 'org.hibernate.orm'
+	pluginVersion = project.version
+}
+
+dependencies {
+	implementation project(':hibernate-core')
+	implementation libs.byteBuddy
+	implementation jakartaLibs.jaxbApi
+
+	implementation gradleApi()
+	implementation localGroovy()
+
+	// for Gradle
+	implementation jakartaLibs.inject
+	implementation localGroovy()
+
+	testImplementation gradleTestKit()
+	testImplementation testLibs.assertjCore
+	testImplementation testLibs.junit5Api
+
+	testRuntimeOnly testLibs.junit5Engine
+}
+
+gradlePlugin {
+	plugins {
+		ormPlugin {
+			id = project.pluginId
+			implementationClass = 'org.hibernate.orm.tooling.gradle.HibernateOrmPlugin'
+		}
+	}
+}
+
+pluginBundle {
+	website = 'https://github.com/hibernate/hibernate-orm/tree/main/tooling/hibernate-gradle-plugin'
+	vcsUrl = 'https://github.com/hibernate/hibernate-orm/tree/main/tooling/hibernate-gradle-plugin'
+	tags = ['hibernate','orm','bytecode','enhancement','bytebuddy']
+
+	// sigh
+	mavenCoordinates {
+		groupId = project.group.toString()
+		artifactId = project.name
+		version = project.version.toString()
+	}
+
+	plugins {
+		ormPlugin {
+			id = project.pluginId
+			displayName = 'Gradle plugin for Hibernate ORM'
+			description = 'Applies Hibernate aspects into the build'
+		}
+	}
+}
+
+test {
+	useJUnitPlatform()
+}
+
+// Publish to the Gradle Plugin Portal
+tasks.release.dependsOn tasks.publishPlugins
+
+// local publishing (SNAPSHOT testing)
+tasks.publish.dependsOn tasks.publishPlugins
+
+// local publishing (SNAPSHOT testing)
+publishing {
+	repositories {
+		maven {
+			name = 'localPluginRepository'
+			url = "${buildDir}/local-plugin-repository"
+		}
+	}
+}
+
+// local publishing (SNAPSHOT testing), cont.
+//		- https://github.com/gradle-nexus/publish-plugin/issues/143
+//		- https://github.com/gradle-nexus/publish-plugin/pull/144
+gradle.taskGraph.whenReady {
+	tasks.withType(PublishToMavenRepository) { PublishToMavenRepository t ->
+		if ( t.repository == null ) {
+			logger.info( "Task `{}` had null repository", t.path )
+		}
+		else if ( t.repository.name == "sonatype" ) {
+			logger.debug( "Disabling task `{}` because it publishes to Sonatype", t.path )
+			t.enabled = false
+		}
+	}
+}
+
+processResources {
+	inputs.property( "orm-version", getVersion() )
+	description = description + " (injected with Hibernate version)"
+	filter( ReplaceTokens, tokens: [ 'hibernateVersion': getVersion() ] )
+}
+
+tasks.withType( JavaCompile ) {
+	options.encoding = 'UTF-8'
+}
+
+if ( !gradle.ext.javaToolchainEnabled ) {
+	tasks.withType( GroovyCompile ) {
+		sourceCompatibility = JavaVersion.toVersion( gradle.ext.baselineJavaVersion )
+		targetCompatibility = JavaVersion.toVersion( gradle.ext.baselineJavaVersion )
+	}
+}
+else {
+	logger.warn( "[WARN] Toolchains are not yet supported for Groovy compilation." +
+						 " Using the JDK that runs Gradle for Groovy compilation." )
+}
+
+checkstyle {
+	sourceSets = [ project.sourceSets.main ]
+	configFile = rootProject.file( 'shared/config/checkstyle/checkstyle.xml' )
+	showViolations = false
+}
+
+
+afterEvaluate {
+	if ( project.ormVersion.isSnapshot ) {
+		release.enabled false
+		publish.enabled false
+		publishPlugins.enabled false
+	}
+}
+
+gradle.taskGraph.whenReady { tg ->
+	if ( tg.hasTask( project.tasks.publishPlugins ) && project.tasks.publishPlugins.enabled  ) {
+		// look for sys-prop or env-var overrides of the tokens used for publishing
+		if ( System.properties.containsKey( 'gradle.publish.key' )
+				|| System.properties.containsKey( 'gradle.publish.secret' )
+				|| System.getenv().containsKey( 'GRADLE_PUBLISH_KEY' )
+				|| System.getenv().containsKey( 'GRADLE_PUBLISH_SECRET' ) ) {
+			// nothing to do - already explicitly set
+		}
+		else {
+			// use the values from the credentials provider, if any
+			if ( credentials.hibernatePluginPortalUsername == null ) {
+				throw new RuntimeException( "`hibernatePluginPortalUsername` not found" )
+			}
+			if ( credentials.hibernatePluginPortalPassword == null ) {
+				throw new RuntimeException( "`hibernatePluginPortalPassword` not found" )
+			}
+			System.setProperty( 'gradle.publish.key', credentials.hibernatePluginPortalUsername )
+			System.setProperty( 'gradle.publish.secret', credentials.hibernatePluginPortalPassword )
+		}
+	}
+}
