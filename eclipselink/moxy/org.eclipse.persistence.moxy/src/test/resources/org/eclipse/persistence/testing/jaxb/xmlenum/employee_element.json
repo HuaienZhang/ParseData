@@ -1,7 +1,0 @@
-{
-   "employee" : {
-      "name" : "John Doe",
-      "department-number" : 1,
-      "roundingMode" : "CEILING"
-   }
-}

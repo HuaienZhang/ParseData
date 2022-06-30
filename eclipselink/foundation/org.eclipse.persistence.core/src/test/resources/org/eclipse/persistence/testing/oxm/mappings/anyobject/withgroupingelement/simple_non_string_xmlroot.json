@@ -1,8 +1,0 @@
-{"root":{
-  "nested":{
-    "theFloat":{
-       "type":"float",
-       "value":22.0
-   }
-   }
-}}

@@ -1,8 +1,0 @@
-{"root":{
-     "name":"theRootName",
-     "mywrapper":{
-        "thinga":{"thingName":"thinga","thingValue":"thingavalue"},
-        "thingb":{"thingName":"thingb","thingValue":"thingbvalue"},
-        "thingc":{"thingName":"thingc","thingValue":"thingcvalue"}
-    }
- }}

@@ -1,3 +1,0 @@
-<schema targetNamespace="commonj.sdo/xml" xmlns="http://www.w3.org/2001/XMLSchema">
-   <include schemaLocation="sdoXML.xsd"/>
-</schema>

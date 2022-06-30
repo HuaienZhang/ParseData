@@ -1,7 +1,0 @@
-{"testTagName":{
-    "type":"listOfEmployee",
-    "item":[{
-        "firstName":"theFirstName",
-        "lastName":"theLastName"
-    }]
-}}

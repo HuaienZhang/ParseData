@@ -1,8 +1,0 @@
-{ "rootElement": {
-    "element1":["element1Value"],
-    "element3":[{
-        "element4":{"type":"string","value":"e1"}
-    }],
-    "element8":[8]
-    }
-}

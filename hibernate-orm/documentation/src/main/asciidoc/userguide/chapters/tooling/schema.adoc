@@ -1,4 +1,0 @@
-[[tooling-schema]]
-=== Schema Management
-
-Coming soon

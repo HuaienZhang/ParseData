@@ -1,8 +1,0 @@
-{"employee":{
-   "@name":"John Doe",
-   "home-address":{
-       "street":"123 Fake Street",
-       "city":"Ottawa",
-       "country":"Canada"
-       }
- }}

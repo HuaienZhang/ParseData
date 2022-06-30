@@ -1,5 +1,0 @@
-{"parent.root":{
-    "xsi.type":"parent.child",
-    "parent.parent-prop":"parentValue",
-    "child.child-prop":"childValue"
-}}

@@ -1,9 +1,0 @@
-{"vehicle-data":{
-    "vtype":"car",
-    "model":"Mustang GT",
-    "manufacturer":"Ford",
-    "top-speed":354,
-    "number-of-doors":2,
-    "miles-per-gallon":26
-  }
-}

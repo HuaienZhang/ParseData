@@ -1,8 +1,0 @@
-{"employee":{
-    "id":123,
-    "responsibilities":{
-        "list":{
-            "responsibility":["A","B"]
-        }
-     }
-}}

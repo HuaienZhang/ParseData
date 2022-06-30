@@ -1,6 +1,0 @@
-{"root":{
-     "name":"theRootName",
-     "thinga":{"otherThingName":"thinga","otherThingValue":"thingavalue"},
-     "thingb":{"otherThingName":"thingb","otherThingValue":"thingbvalue"},
-     "thingc":{"otherThingName":"thingc","otherThingValue":"thingcvalue"}
- }}

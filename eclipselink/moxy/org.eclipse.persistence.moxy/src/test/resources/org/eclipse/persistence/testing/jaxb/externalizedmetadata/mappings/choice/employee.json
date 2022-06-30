@@ -1,8 +1,0 @@
-{"employee":{
-   "integers":{
-       "my-integer":66
-   },
-   "my-read-only-float":66.66,
-   "my-write-only-integer":66
-   }
-}

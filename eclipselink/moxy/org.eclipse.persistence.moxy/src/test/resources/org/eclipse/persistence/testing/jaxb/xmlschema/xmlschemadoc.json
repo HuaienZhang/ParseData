@@ -1,7 +1,0 @@
-{"schema":{
-     "targetNamespace":"someTargetNamespace",
-     "attributeFormDefault":"qualified",
-     "complexType":[{
-         "name":"testComplexType"
-     }]
-}}

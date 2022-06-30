@@ -1,5 +1,0 @@
-{
-    "xsi:type":"customerWithInheritance",
-    "name":"theName",
-    "type":"propertyType"
-}

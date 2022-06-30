@@ -1,8 +1,0 @@
-{"root":{
-  "nested":{
-     "blah":{
-         "type":"childType",
-         "value":"child's text"
-     }
-   }
-}}
