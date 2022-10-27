@@ -26,8 +26,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 @Inherited
 @Target({ElementType.METHOD, ElementType.ANNOTATION_TYPE})
 @Retention(RetentionPolicy.RUNTIME)
-
-@ExtendWith( ExpectedExceptionExtension.class )
+@ExtendWith(ExpectedExceptionExtension.class)
 public @interface ExpectedException {
 	Class<? extends Throwable> value();
 }
